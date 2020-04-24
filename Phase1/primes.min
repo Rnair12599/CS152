@@ -5,7 +5,7 @@
 ##  larger primes in a boolean array.  The array stores a[k] = 1 if k is composite
 ##  (not prime), and a[k] = 0 if k is not divisible by the divisors considered
 ##  thus far.
-## 
+##
 ##  Requires a specified integer n as input, assumed to be < 1000.
 
 function main;
@@ -36,9 +36,6 @@ beginbody	## main program
 	    a[i] := 0;
 	    i := i + 1;
     endloop;
-
-function 2n;
-function i_;
 
     ## make the array
     i := 2;
