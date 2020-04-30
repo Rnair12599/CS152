@@ -8,8 +8,6 @@ LOWER [a-z]
 UPPER [A-Z]
 ALPHA [a-zA-Z]
 ALPHANUM [0-9a-zA-Z]
-LETTER_UNDERSCORE [a-zA-Z_]
-CHAR [0-9a-zA-Z_]
 
 
 %%
