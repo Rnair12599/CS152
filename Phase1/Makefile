@@ -1,5 +1,5 @@
 
-ubuntu:
+test:
 	rm -f lex.yy.c
 	rm -f lexer
 	flex mini_l.lex
