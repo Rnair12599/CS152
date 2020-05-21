@@ -7,6 +7,5 @@ i : integer;
 endlocals
 
 beginbody
-   read i;
-   write i+1;
+   a = 1;
 endbody

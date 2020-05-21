@@ -4,7 +4,7 @@
 #include <stdlib.h>
 extern int currLine;
 extern char* yytext;
-void yyerror(const char* s);
+int yyerror(const char* s);
 %}
 
 %union{
@@ -13,7 +13,7 @@ void yyerror(const char* s);
  }
 
 %error-verbose
-%start Program_boundary
+%start Program_start
 
 %token <ident_val> IDENT
 %token <num_val> NUMBER
@@ -34,15 +34,16 @@ void yyerror(const char* s);
 
 
 
-%%  /*  Grammar rules and actions follow  */
+%%
 
-Program_boundary:     {printf("Program_boundary -> epsilon\n");}
-                 | Func Program_boundary
-		 {printf("Program_boundary -> Func Program_boundary\n");}
+Program_start:     {printf("Program_start -> epsilon\n");}
+                 | Func Program_start
+		 {printf("Program_start -> Func Program_start\n");}
 ;
 
 Func:        FUNCTION Identifier SEMICOLON BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
 {printf("Func -> FUNCTION Identifier SEMICOLON BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY\n");}
+|FUNCTION Identifier error BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
 ;
 
 SingleDef:     Identifiers COLON INTEGER
@@ -57,6 +58,7 @@ MultipleDefs:    {printf("MultipleDefs -> epsilon\n");}
 
 Statement:      Identifiers ASSIGN Expression
 {printf("Statement -> Identifiers ASSIGN Expression\n");}
+                 | Identifiers error Expression
                  | IF BooleanExpression THEN MultipleStat Else ENDIF {printf("Statement -> IF BooleanExpression THEN MultipleStat Else ENDIF\n");}
                  | WHILE BooleanExpression BEGINLOOP MultipleStat ENDLOOP {printf("Statement -> WHILE BooleanExpression BEGINLOOP MultipleStat ENDLOOP\n");}
                  | DO BEGINLOOP MultipleStat ENDLOOP WHILE BooleanExpression{printf("Statement -> DO BEGINLOOP MultipleStat ENDLOOP WHILE BooleanExpression\n");}
@@ -145,8 +147,10 @@ Relational_operators:            EQ
 Identifiers: Identifier COMMA Identifiers{printf("Identifiers -> Identifier COMMA Identifiers\n");}
      |Identifier L_SQUARE_BRACKET Expression R_SQUARE_BRACKET
       {printf("Identifiers -> Identifier  L_SQUARE_BRACKET Expression R_SQUARE_BRACKET\n");}
+     |Identifier error
      |Identifier
      {printf("Identifiers -> Identifier \n");}
+
 
 Identifier:      IDENT
 {printf("Identifier -> IDENT %s \n", yytext);}
@@ -154,7 +158,6 @@ Identifier:      IDENT
 %%
 
 
-void yyerror(const char* type) {
+int yyerror(const char* type) {
   printf("ERROR: %s at symbol \"%s\" on line %d\n", type, yytext, currLine);
-  exit(1);
 }
