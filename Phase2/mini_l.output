@@ -1,0 +1,1779 @@
+State 15 conflicts: 2 shift/reduce
+State 21 conflicts: 1 shift/reduce
+State 30 conflicts: 1 shift/reduce
+State 41 conflicts: 1 shift/reduce
+State 45 conflicts: 1 shift/reduce
+State 46 conflicts: 1 shift/reduce
+State 47 conflicts: 1 shift/reduce
+State 48 conflicts: 1 shift/reduce
+State 49 conflicts: 1 shift/reduce
+State 50 conflicts: 1 shift/reduce, 1 reduce/reduce
+State 67 conflicts: 1 shift/reduce, 1 reduce/reduce
+State 70 conflicts: 1 shift/reduce
+State 74 conflicts: 1 shift/reduce
+State 77 conflicts: 1 shift/reduce
+State 86 conflicts: 1 shift/reduce
+State 87 conflicts: 1 shift/reduce
+State 101 conflicts: 1 shift/reduce
+State 102 conflicts: 1 shift/reduce
+State 114 conflicts: 1 shift/reduce
+State 116 conflicts: 1 shift/reduce
+State 117 conflicts: 1 shift/reduce
+State 135 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: Program_start $end
+
+    1 Program_start: /* empty */
+    2              | Func Program_start
+
+    3 Func: FUNCTION Identifier SEMICOLON BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+    4     | FUNCTION Identifier error BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    5 SingleDef: Identifiers COLON INTEGER
+    6          | Identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER
+
+    7 MultipleDefs: /* empty */
+    8             | SingleDef SEMICOLON MultipleDefs
+
+    9 Statement: Identifiers ASSIGN Expression
+   10          | Identifiers error Expression
+   11          | IF BooleanExpression THEN MultipleStat Else ENDIF
+   12          | WHILE BooleanExpression BEGINLOOP MultipleStat ENDLOOP
+   13          | DO BEGINLOOP MultipleStat ENDLOOP WHILE BooleanExpression
+   14          | FOR Identifier IN Identifier BEGINLOOP MultipleStat ENDLOOP
+   15          | READ Identifiers
+   16          | WRITE Identifiers
+   17          | CONTINUE
+   18          | RETURN Expression
+
+   19 Else: /* empty */
+   20     | ELSE MultipleStat
+
+   21 MultipleStat: Statement SEMICOLON MultipleStat
+   22             | Statement SEMICOLON
+
+   23 Expression: Multipliers
+   24           | Multipliers ADD Expression
+   25           | Multipliers SUB Expression
+
+   26 Expressions: /* empty */
+   27            | Expression COMMA Expressions
+   28            | Expression
+
+   29 Multipliers: AddOrSub
+   30            | AddOrSub MULT Multipliers
+   31            | AddOrSub DIV Multipliers
+   32            | AddOrSub MOD Multipliers
+
+   33 AddOrSub: Identifiers
+   34         | SUB Identifiers
+   35         | NUMBER
+   36         | SUB NUMBER
+   37         | SUB L_PAREN Expression R_PAREN
+   38         | NestedExpression
+
+   39 NestedExpression: L_PAREN Expression R_PAREN
+   40                 | /* empty */
+   41                 | Identifiers L_PAREN Expressions R_PAREN
+
+   42 BooleanExpression: CheckforAND
+   43                  | CheckforAND OR BooleanExpression
+
+   44 CheckforAND: CheckforNot
+   45            | CheckforNot AND CheckforAND
+
+   46 CheckforNot: NOT BoolValues
+   47            | BoolValues
+
+   48 BoolValues: Expression Relational_operators Expression
+   49           | TRUE
+   50           | FALSE
+   51           | L_PAREN BooleanExpression R_PAREN
+
+   52 Relational_operators: EQ
+   53                     | NEQ
+   54                     | LT
+   55                     | GT
+   56                     | LTE
+   57                     | GTE
+
+   58 Identifiers: Identifier COMMA Identifiers
+   59            | Identifier L_SQUARE_BRACKET Expression R_SQUARE_BRACKET
+   60            | Identifier error
+   61            | Identifier
+
+   62 Identifier: IDENT
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256) 4 10 60
+IDENT (258) 62
+NUMBER (259) 6 35 36
+FUNCTION (260) 3 4
+BEGIN_PARAMS (261) 3 4
+END_PARAMS (262) 3 4
+BEGIN_LOCALS (263) 3 4
+END_LOCALS (264) 3 4
+BEGIN_BODY (265) 3 4
+END_BODY (266) 3 4
+INTEGER (267) 5 6
+ARRAY (268) 6
+OF (269) 6
+IF (270) 11
+THEN (271) 11
+ENDIF (272) 11
+ELSE (273) 20
+CONTINUE (274) 17
+READ (275) 15
+WRITE (276) 16
+WHILE (277) 12 13
+DO (278) 13
+FOR (279) 14
+IN (280) 14
+BEGINLOOP (281) 12 13 14
+ENDLOOP (282) 12 13 14
+TRUE (283) 49
+FALSE (284) 50
+ASSIGN (285) 9
+OR (286) 43
+AND (287) 45
+NOT (288) 46
+GTE (289) 57
+LTE (290) 56
+GT (291) 55
+LT (292) 54
+NEQ (293) 53
+EQ (294) 52
+MOD (295) 32
+DIV (296) 31
+MULT (297) 30
+SUB (298) 25 34 36 37
+ADD (299) 24
+L_PAREN (300) 37 39 41 51
+R_PAREN (301) 37 39 41 51
+L_SQUARE_BRACKET (302) 6 59
+R_SQUARE_BRACKET (303) 6 59
+SEMICOLON (304) 3 8 21 22
+COLON (305) 5 6
+COMMA (306) 27 58
+RETURN (307) 18
+
+
+Nonterminals, with rules where they appear
+
+$accept (53)
+    on left: 0
+Program_start (54)
+    on left: 1 2, on right: 0 2
+Func (55)
+    on left: 3 4, on right: 2
+SingleDef (56)
+    on left: 5 6, on right: 8
+MultipleDefs (57)
+    on left: 7 8, on right: 3 4 8
+Statement (58)
+    on left: 9 10 11 12 13 14 15 16 17 18, on right: 21 22
+Else (59)
+    on left: 19 20, on right: 11
+MultipleStat (60)
+    on left: 21 22, on right: 3 4 11 12 13 14 20 21
+Expression (61)
+    on left: 23 24 25, on right: 9 10 18 24 25 27 28 37 39 48 59
+Expressions (62)
+    on left: 26 27 28, on right: 27 41
+Multipliers (63)
+    on left: 29 30 31 32, on right: 23 24 25 30 31 32
+AddOrSub (64)
+    on left: 33 34 35 36 37 38, on right: 29 30 31 32
+NestedExpression (65)
+    on left: 39 40 41, on right: 38
+BooleanExpression (66)
+    on left: 42 43, on right: 11 12 13 43 51
+CheckforAND (67)
+    on left: 44 45, on right: 42 43 45
+CheckforNot (68)
+    on left: 46 47, on right: 44 45
+BoolValues (69)
+    on left: 48 49 50 51, on right: 46 47
+Relational_operators (70)
+    on left: 52 53 54 55 56 57, on right: 48
+Identifiers (71)
+    on left: 58 59 60 61, on right: 5 6 9 10 15 16 33 34 41 58
+Identifier (72)
+    on left: 62, on right: 3 4 14 58 59 60 61
+
+
+state 0
+
+    0 $accept: . Program_start $end
+
+    FUNCTION  shift, and go to state 1
+
+    $default  reduce using rule 1 (Program_start)
+
+    Program_start  go to state 2
+    Func           go to state 3
+
+
+state 1
+
+    3 Func: FUNCTION . Identifier SEMICOLON BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+    4     | FUNCTION . Identifier error BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    IDENT  shift, and go to state 4
+
+    Identifier  go to state 5
+
+
+state 2
+
+    0 $accept: Program_start . $end
+
+    $end  shift, and go to state 6
+
+
+state 3
+
+    2 Program_start: Func . Program_start
+
+    FUNCTION  shift, and go to state 1
+
+    $default  reduce using rule 1 (Program_start)
+
+    Program_start  go to state 7
+    Func           go to state 3
+
+
+state 4
+
+   62 Identifier: IDENT .
+
+    $default  reduce using rule 62 (Identifier)
+
+
+state 5
+
+    3 Func: FUNCTION Identifier . SEMICOLON BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+    4     | FUNCTION Identifier . error BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    error      shift, and go to state 8
+    SEMICOLON  shift, and go to state 9
+
+
+state 6
+
+    0 $accept: Program_start $end .
+
+    $default  accept
+
+
+state 7
+
+    2 Program_start: Func Program_start .
+
+    $default  reduce using rule 2 (Program_start)
+
+
+state 8
+
+    4 Func: FUNCTION Identifier error . BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    BEGIN_PARAMS  shift, and go to state 10
+
+
+state 9
+
+    3 Func: FUNCTION Identifier SEMICOLON . BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    BEGIN_PARAMS  shift, and go to state 11
+
+
+state 10
+
+    4 Func: FUNCTION Identifier error BEGIN_PARAMS . MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    IDENT  shift, and go to state 4
+
+    $default  reduce using rule 7 (MultipleDefs)
+
+    SingleDef     go to state 12
+    MultipleDefs  go to state 13
+    Identifiers   go to state 14
+    Identifier    go to state 15
+
+
+state 11
+
+    3 Func: FUNCTION Identifier SEMICOLON BEGIN_PARAMS . MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    IDENT  shift, and go to state 4
+
+    $default  reduce using rule 7 (MultipleDefs)
+
+    SingleDef     go to state 12
+    MultipleDefs  go to state 16
+    Identifiers   go to state 14
+    Identifier    go to state 15
+
+
+state 12
+
+    8 MultipleDefs: SingleDef . SEMICOLON MultipleDefs
+
+    SEMICOLON  shift, and go to state 17
+
+
+state 13
+
+    4 Func: FUNCTION Identifier error BEGIN_PARAMS MultipleDefs . END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    END_PARAMS  shift, and go to state 18
+
+
+state 14
+
+    5 SingleDef: Identifiers . COLON INTEGER
+    6          | Identifiers . COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER
+
+    COLON  shift, and go to state 19
+
+
+state 15
+
+   58 Identifiers: Identifier . COMMA Identifiers
+   59            | Identifier . L_SQUARE_BRACKET Expression R_SQUARE_BRACKET
+   60            | Identifier . error
+   61            | Identifier .
+
+    error             shift, and go to state 20
+    L_SQUARE_BRACKET  shift, and go to state 21
+    COMMA             shift, and go to state 22
+
+    error             [reduce using rule 61 (Identifiers)]
+    THEN              reduce using rule 61 (Identifiers)
+    BEGINLOOP         reduce using rule 61 (Identifiers)
+    ASSIGN            reduce using rule 61 (Identifiers)
+    OR                reduce using rule 61 (Identifiers)
+    AND               reduce using rule 61 (Identifiers)
+    GTE               reduce using rule 61 (Identifiers)
+    LTE               reduce using rule 61 (Identifiers)
+    GT                reduce using rule 61 (Identifiers)
+    LT                reduce using rule 61 (Identifiers)
+    NEQ               reduce using rule 61 (Identifiers)
+    EQ                reduce using rule 61 (Identifiers)
+    MOD               reduce using rule 61 (Identifiers)
+    DIV               reduce using rule 61 (Identifiers)
+    MULT              reduce using rule 61 (Identifiers)
+    SUB               reduce using rule 61 (Identifiers)
+    ADD               reduce using rule 61 (Identifiers)
+    L_PAREN           reduce using rule 61 (Identifiers)
+    R_PAREN           reduce using rule 61 (Identifiers)
+    R_SQUARE_BRACKET  reduce using rule 61 (Identifiers)
+    SEMICOLON         reduce using rule 61 (Identifiers)
+    COLON             reduce using rule 61 (Identifiers)
+    COMMA             [reduce using rule 61 (Identifiers)]
+
+
+state 16
+
+    3 Func: FUNCTION Identifier SEMICOLON BEGIN_PARAMS MultipleDefs . END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    END_PARAMS  shift, and go to state 23
+
+
+state 17
+
+    8 MultipleDefs: SingleDef SEMICOLON . MultipleDefs
+
+    IDENT  shift, and go to state 4
+
+    $default  reduce using rule 7 (MultipleDefs)
+
+    SingleDef     go to state 12
+    MultipleDefs  go to state 24
+    Identifiers   go to state 14
+    Identifier    go to state 15
+
+
+state 18
+
+    4 Func: FUNCTION Identifier error BEGIN_PARAMS MultipleDefs END_PARAMS . BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    BEGIN_LOCALS  shift, and go to state 25
+
+
+state 19
+
+    5 SingleDef: Identifiers COLON . INTEGER
+    6          | Identifiers COLON . ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER
+
+    INTEGER  shift, and go to state 26
+    ARRAY    shift, and go to state 27
+
+
+state 20
+
+   60 Identifiers: Identifier error .
+
+    $default  reduce using rule 60 (Identifiers)
+
+
+state 21
+
+   59 Identifiers: Identifier L_SQUARE_BRACKET . Expression R_SQUARE_BRACKET
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 30
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression        go to state 31
+    Multipliers       go to state 32
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 22
+
+   58 Identifiers: Identifier COMMA . Identifiers
+
+    IDENT  shift, and go to state 4
+
+    Identifiers  go to state 36
+    Identifier   go to state 15
+
+
+state 23
+
+    3 Func: FUNCTION Identifier SEMICOLON BEGIN_PARAMS MultipleDefs END_PARAMS . BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    BEGIN_LOCALS  shift, and go to state 37
+
+
+state 24
+
+    8 MultipleDefs: SingleDef SEMICOLON MultipleDefs .
+
+    $default  reduce using rule 8 (MultipleDefs)
+
+
+state 25
+
+    4 Func: FUNCTION Identifier error BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS . MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    IDENT  shift, and go to state 4
+
+    $default  reduce using rule 7 (MultipleDefs)
+
+    SingleDef     go to state 12
+    MultipleDefs  go to state 38
+    Identifiers   go to state 14
+    Identifier    go to state 15
+
+
+state 26
+
+    5 SingleDef: Identifiers COLON INTEGER .
+
+    $default  reduce using rule 5 (SingleDef)
+
+
+state 27
+
+    6 SingleDef: Identifiers COLON ARRAY . L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER
+
+    L_SQUARE_BRACKET  shift, and go to state 39
+
+
+state 28
+
+   35 AddOrSub: NUMBER .
+
+    $default  reduce using rule 35 (AddOrSub)
+
+
+state 29
+
+   34 AddOrSub: SUB . Identifiers
+   36         | SUB . NUMBER
+   37         | SUB . L_PAREN Expression R_PAREN
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 40
+    L_PAREN  shift, and go to state 41
+
+    Identifiers  go to state 42
+    Identifier   go to state 15
+
+
+state 30
+
+   39 NestedExpression: L_PAREN . Expression R_PAREN
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 30
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression        go to state 43
+    Multipliers       go to state 32
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 31
+
+   59 Identifiers: Identifier L_SQUARE_BRACKET Expression . R_SQUARE_BRACKET
+
+    R_SQUARE_BRACKET  shift, and go to state 44
+
+
+state 32
+
+   23 Expression: Multipliers .
+   24           | Multipliers . ADD Expression
+   25           | Multipliers . SUB Expression
+
+    SUB  shift, and go to state 45
+    ADD  shift, and go to state 46
+
+    $default  reduce using rule 23 (Expression)
+
+
+state 33
+
+   29 Multipliers: AddOrSub .
+   30            | AddOrSub . MULT Multipliers
+   31            | AddOrSub . DIV Multipliers
+   32            | AddOrSub . MOD Multipliers
+
+    MOD   shift, and go to state 47
+    DIV   shift, and go to state 48
+    MULT  shift, and go to state 49
+
+    $default  reduce using rule 29 (Multipliers)
+
+
+state 34
+
+   38 AddOrSub: NestedExpression .
+
+    $default  reduce using rule 38 (AddOrSub)
+
+
+state 35
+
+   33 AddOrSub: Identifiers .
+   41 NestedExpression: Identifiers . L_PAREN Expressions R_PAREN
+
+    L_PAREN  shift, and go to state 50
+
+    $default  reduce using rule 33 (AddOrSub)
+
+
+state 36
+
+   58 Identifiers: Identifier COMMA Identifiers .
+
+    $default  reduce using rule 58 (Identifiers)
+
+
+state 37
+
+    3 Func: FUNCTION Identifier SEMICOLON BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS . MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    IDENT  shift, and go to state 4
+
+    $default  reduce using rule 7 (MultipleDefs)
+
+    SingleDef     go to state 12
+    MultipleDefs  go to state 51
+    Identifiers   go to state 14
+    Identifier    go to state 15
+
+
+state 38
+
+    4 Func: FUNCTION Identifier error BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs . END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    END_LOCALS  shift, and go to state 52
+
+
+state 39
+
+    6 SingleDef: Identifiers COLON ARRAY L_SQUARE_BRACKET . NUMBER R_SQUARE_BRACKET OF INTEGER
+
+    NUMBER  shift, and go to state 53
+
+
+state 40
+
+   36 AddOrSub: SUB NUMBER .
+
+    $default  reduce using rule 36 (AddOrSub)
+
+
+state 41
+
+   37 AddOrSub: SUB L_PAREN . Expression R_PAREN
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 30
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression        go to state 54
+    Multipliers       go to state 32
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 42
+
+   34 AddOrSub: SUB Identifiers .
+
+    $default  reduce using rule 34 (AddOrSub)
+
+
+state 43
+
+   39 NestedExpression: L_PAREN Expression . R_PAREN
+
+    R_PAREN  shift, and go to state 55
+
+
+state 44
+
+   59 Identifiers: Identifier L_SQUARE_BRACKET Expression R_SQUARE_BRACKET .
+
+    $default  reduce using rule 59 (Identifiers)
+
+
+state 45
+
+   25 Expression: Multipliers SUB . Expression
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 30
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression        go to state 56
+    Multipliers       go to state 32
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 46
+
+   24 Expression: Multipliers ADD . Expression
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 30
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression        go to state 57
+    Multipliers       go to state 32
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 47
+
+   32 Multipliers: AddOrSub MOD . Multipliers
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 30
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Multipliers       go to state 58
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 48
+
+   31 Multipliers: AddOrSub DIV . Multipliers
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 30
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Multipliers       go to state 59
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 49
+
+   30 Multipliers: AddOrSub MULT . Multipliers
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 30
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Multipliers       go to state 60
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 50
+
+   41 NestedExpression: Identifiers L_PAREN . Expressions R_PAREN
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 30
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    R_PAREN   reduce using rule 26 (Expressions)
+    R_PAREN   [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression        go to state 61
+    Expressions       go to state 62
+    Multipliers       go to state 32
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 51
+
+    3 Func: FUNCTION Identifier SEMICOLON BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs . END_LOCALS BEGIN_BODY MultipleStat END_BODY
+
+    END_LOCALS  shift, and go to state 63
+
+
+state 52
+
+    4 Func: FUNCTION Identifier error BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS . BEGIN_BODY MultipleStat END_BODY
+
+    BEGIN_BODY  shift, and go to state 64
+
+
+state 53
+
+    6 SingleDef: Identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER . R_SQUARE_BRACKET OF INTEGER
+
+    R_SQUARE_BRACKET  shift, and go to state 65
+
+
+state 54
+
+   37 AddOrSub: SUB L_PAREN Expression . R_PAREN
+
+    R_PAREN  shift, and go to state 66
+
+
+state 55
+
+   39 NestedExpression: L_PAREN Expression R_PAREN .
+
+    $default  reduce using rule 39 (NestedExpression)
+
+
+state 56
+
+   25 Expression: Multipliers SUB Expression .
+
+    $default  reduce using rule 25 (Expression)
+
+
+state 57
+
+   24 Expression: Multipliers ADD Expression .
+
+    $default  reduce using rule 24 (Expression)
+
+
+state 58
+
+   32 Multipliers: AddOrSub MOD Multipliers .
+
+    $default  reduce using rule 32 (Multipliers)
+
+
+state 59
+
+   31 Multipliers: AddOrSub DIV Multipliers .
+
+    $default  reduce using rule 31 (Multipliers)
+
+
+state 60
+
+   30 Multipliers: AddOrSub MULT Multipliers .
+
+    $default  reduce using rule 30 (Multipliers)
+
+
+state 61
+
+   27 Expressions: Expression . COMMA Expressions
+   28            | Expression .
+
+    COMMA  shift, and go to state 67
+
+    $default  reduce using rule 28 (Expressions)
+
+
+state 62
+
+   41 NestedExpression: Identifiers L_PAREN Expressions . R_PAREN
+
+    R_PAREN  shift, and go to state 68
+
+
+state 63
+
+    3 Func: FUNCTION Identifier SEMICOLON BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS . BEGIN_BODY MultipleStat END_BODY
+
+    BEGIN_BODY  shift, and go to state 69
+
+
+state 64
+
+    4 Func: FUNCTION Identifier error BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY . MultipleStat END_BODY
+
+    IDENT     shift, and go to state 4
+    IF        shift, and go to state 70
+    CONTINUE  shift, and go to state 71
+    READ      shift, and go to state 72
+    WRITE     shift, and go to state 73
+    WHILE     shift, and go to state 74
+    DO        shift, and go to state 75
+    FOR       shift, and go to state 76
+    RETURN    shift, and go to state 77
+
+    Statement     go to state 78
+    MultipleStat  go to state 79
+    Identifiers   go to state 80
+    Identifier    go to state 15
+
+
+state 65
+
+    6 SingleDef: Identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET . OF INTEGER
+
+    OF  shift, and go to state 81
+
+
+state 66
+
+   37 AddOrSub: SUB L_PAREN Expression R_PAREN .
+
+    $default  reduce using rule 37 (AddOrSub)
+
+
+state 67
+
+   27 Expressions: Expression COMMA . Expressions
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 30
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    R_PAREN   reduce using rule 26 (Expressions)
+    R_PAREN   [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression        go to state 61
+    Expressions       go to state 82
+    Multipliers       go to state 32
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 68
+
+   41 NestedExpression: Identifiers L_PAREN Expressions R_PAREN .
+
+    $default  reduce using rule 41 (NestedExpression)
+
+
+state 69
+
+    3 Func: FUNCTION Identifier SEMICOLON BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY . MultipleStat END_BODY
+
+    IDENT     shift, and go to state 4
+    IF        shift, and go to state 70
+    CONTINUE  shift, and go to state 71
+    READ      shift, and go to state 72
+    WRITE     shift, and go to state 73
+    WHILE     shift, and go to state 74
+    DO        shift, and go to state 75
+    FOR       shift, and go to state 76
+    RETURN    shift, and go to state 77
+
+    Statement     go to state 78
+    MultipleStat  go to state 83
+    Identifiers   go to state 80
+    Identifier    go to state 15
+
+
+state 70
+
+   11 Statement: IF . BooleanExpression THEN MultipleStat Else ENDIF
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    TRUE     shift, and go to state 84
+    FALSE    shift, and go to state 85
+    NOT      shift, and go to state 86
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 87
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression         go to state 88
+    Multipliers        go to state 32
+    AddOrSub           go to state 33
+    NestedExpression   go to state 34
+    BooleanExpression  go to state 89
+    CheckforAND        go to state 90
+    CheckforNot        go to state 91
+    BoolValues         go to state 92
+    Identifiers        go to state 35
+    Identifier         go to state 15
+
+
+state 71
+
+   17 Statement: CONTINUE .
+
+    $default  reduce using rule 17 (Statement)
+
+
+state 72
+
+   15 Statement: READ . Identifiers
+
+    IDENT  shift, and go to state 4
+
+    Identifiers  go to state 93
+    Identifier   go to state 15
+
+
+state 73
+
+   16 Statement: WRITE . Identifiers
+
+    IDENT  shift, and go to state 4
+
+    Identifiers  go to state 94
+    Identifier   go to state 15
+
+
+state 74
+
+   12 Statement: WHILE . BooleanExpression BEGINLOOP MultipleStat ENDLOOP
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    TRUE     shift, and go to state 84
+    FALSE    shift, and go to state 85
+    NOT      shift, and go to state 86
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 87
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression         go to state 88
+    Multipliers        go to state 32
+    AddOrSub           go to state 33
+    NestedExpression   go to state 34
+    BooleanExpression  go to state 95
+    CheckforAND        go to state 90
+    CheckforNot        go to state 91
+    BoolValues         go to state 92
+    Identifiers        go to state 35
+    Identifier         go to state 15
+
+
+state 75
+
+   13 Statement: DO . BEGINLOOP MultipleStat ENDLOOP WHILE BooleanExpression
+
+    BEGINLOOP  shift, and go to state 96
+
+
+state 76
+
+   14 Statement: FOR . Identifier IN Identifier BEGINLOOP MultipleStat ENDLOOP
+
+    IDENT  shift, and go to state 4
+
+    Identifier  go to state 97
+
+
+state 77
+
+   18 Statement: RETURN . Expression
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 30
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression        go to state 98
+    Multipliers       go to state 32
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 78
+
+   21 MultipleStat: Statement . SEMICOLON MultipleStat
+   22             | Statement . SEMICOLON
+
+    SEMICOLON  shift, and go to state 99
+
+
+state 79
+
+    4 Func: FUNCTION Identifier error BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat . END_BODY
+
+    END_BODY  shift, and go to state 100
+
+
+state 80
+
+    9 Statement: Identifiers . ASSIGN Expression
+   10          | Identifiers . error Expression
+
+    error   shift, and go to state 101
+    ASSIGN  shift, and go to state 102
+
+
+state 81
+
+    6 SingleDef: Identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF . INTEGER
+
+    INTEGER  shift, and go to state 103
+
+
+state 82
+
+   27 Expressions: Expression COMMA Expressions .
+
+    $default  reduce using rule 27 (Expressions)
+
+
+state 83
+
+    3 Func: FUNCTION Identifier SEMICOLON BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat . END_BODY
+
+    END_BODY  shift, and go to state 104
+
+
+state 84
+
+   49 BoolValues: TRUE .
+
+    $default  reduce using rule 49 (BoolValues)
+
+
+state 85
+
+   50 BoolValues: FALSE .
+
+    $default  reduce using rule 50 (BoolValues)
+
+
+state 86
+
+   46 CheckforNot: NOT . BoolValues
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    TRUE     shift, and go to state 84
+    FALSE    shift, and go to state 85
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 87
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression        go to state 88
+    Multipliers       go to state 32
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    BoolValues        go to state 105
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 87
+
+   39 NestedExpression: L_PAREN . Expression R_PAREN
+   51 BoolValues: L_PAREN . BooleanExpression R_PAREN
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    TRUE     shift, and go to state 84
+    FALSE    shift, and go to state 85
+    NOT      shift, and go to state 86
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 87
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression         go to state 106
+    Multipliers        go to state 32
+    AddOrSub           go to state 33
+    NestedExpression   go to state 34
+    BooleanExpression  go to state 107
+    CheckforAND        go to state 90
+    CheckforNot        go to state 91
+    BoolValues         go to state 92
+    Identifiers        go to state 35
+    Identifier         go to state 15
+
+
+state 88
+
+   48 BoolValues: Expression . Relational_operators Expression
+
+    GTE  shift, and go to state 108
+    LTE  shift, and go to state 109
+    GT   shift, and go to state 110
+    LT   shift, and go to state 111
+    NEQ  shift, and go to state 112
+    EQ   shift, and go to state 113
+
+    Relational_operators  go to state 114
+
+
+state 89
+
+   11 Statement: IF BooleanExpression . THEN MultipleStat Else ENDIF
+
+    THEN  shift, and go to state 115
+
+
+state 90
+
+   42 BooleanExpression: CheckforAND .
+   43                  | CheckforAND . OR BooleanExpression
+
+    OR  shift, and go to state 116
+
+    $default  reduce using rule 42 (BooleanExpression)
+
+
+state 91
+
+   44 CheckforAND: CheckforNot .
+   45            | CheckforNot . AND CheckforAND
+
+    AND  shift, and go to state 117
+
+    $default  reduce using rule 44 (CheckforAND)
+
+
+state 92
+
+   47 CheckforNot: BoolValues .
+
+    $default  reduce using rule 47 (CheckforNot)
+
+
+state 93
+
+   15 Statement: READ Identifiers .
+
+    $default  reduce using rule 15 (Statement)
+
+
+state 94
+
+   16 Statement: WRITE Identifiers .
+
+    $default  reduce using rule 16 (Statement)
+
+
+state 95
+
+   12 Statement: WHILE BooleanExpression . BEGINLOOP MultipleStat ENDLOOP
+
+    BEGINLOOP  shift, and go to state 118
+
+
+state 96
+
+   13 Statement: DO BEGINLOOP . MultipleStat ENDLOOP WHILE BooleanExpression
+
+    IDENT     shift, and go to state 4
+    IF        shift, and go to state 70
+    CONTINUE  shift, and go to state 71
+    READ      shift, and go to state 72
+    WRITE     shift, and go to state 73
+    WHILE     shift, and go to state 74
+    DO        shift, and go to state 75
+    FOR       shift, and go to state 76
+    RETURN    shift, and go to state 77
+
+    Statement     go to state 78
+    MultipleStat  go to state 119
+    Identifiers   go to state 80
+    Identifier    go to state 15
+
+
+state 97
+
+   14 Statement: FOR Identifier . IN Identifier BEGINLOOP MultipleStat ENDLOOP
+
+    IN  shift, and go to state 120
+
+
+state 98
+
+   18 Statement: RETURN Expression .
+
+    $default  reduce using rule 18 (Statement)
+
+
+state 99
+
+   21 MultipleStat: Statement SEMICOLON . MultipleStat
+   22             | Statement SEMICOLON .
+
+    IDENT     shift, and go to state 4
+    IF        shift, and go to state 70
+    CONTINUE  shift, and go to state 71
+    READ      shift, and go to state 72
+    WRITE     shift, and go to state 73
+    WHILE     shift, and go to state 74
+    DO        shift, and go to state 75
+    FOR       shift, and go to state 76
+    RETURN    shift, and go to state 77
+
+    $default  reduce using rule 22 (MultipleStat)
+
+    Statement     go to state 78
+    MultipleStat  go to state 121
+    Identifiers   go to state 80
+    Identifier    go to state 15
+
+
+state 100
+
+    4 Func: FUNCTION Identifier error BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY .
+
+    $default  reduce using rule 4 (Func)
+
+
+state 101
+
+   10 Statement: Identifiers error . Expression
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 30
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression        go to state 122
+    Multipliers       go to state 32
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 102
+
+    9 Statement: Identifiers ASSIGN . Expression
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 30
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression        go to state 123
+    Multipliers       go to state 32
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 103
+
+    6 SingleDef: Identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER .
+
+    $default  reduce using rule 6 (SingleDef)
+
+
+state 104
+
+    3 Func: FUNCTION Identifier SEMICOLON BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY .
+
+    $default  reduce using rule 3 (Func)
+
+
+state 105
+
+   46 CheckforNot: NOT BoolValues .
+
+    $default  reduce using rule 46 (CheckforNot)
+
+
+state 106
+
+   39 NestedExpression: L_PAREN Expression . R_PAREN
+   48 BoolValues: Expression . Relational_operators Expression
+
+    GTE      shift, and go to state 108
+    LTE      shift, and go to state 109
+    GT       shift, and go to state 110
+    LT       shift, and go to state 111
+    NEQ      shift, and go to state 112
+    EQ       shift, and go to state 113
+    R_PAREN  shift, and go to state 55
+
+    Relational_operators  go to state 114
+
+
+state 107
+
+   51 BoolValues: L_PAREN BooleanExpression . R_PAREN
+
+    R_PAREN  shift, and go to state 124
+
+
+state 108
+
+   57 Relational_operators: GTE .
+
+    $default  reduce using rule 57 (Relational_operators)
+
+
+state 109
+
+   56 Relational_operators: LTE .
+
+    $default  reduce using rule 56 (Relational_operators)
+
+
+state 110
+
+   55 Relational_operators: GT .
+
+    $default  reduce using rule 55 (Relational_operators)
+
+
+state 111
+
+   54 Relational_operators: LT .
+
+    $default  reduce using rule 54 (Relational_operators)
+
+
+state 112
+
+   53 Relational_operators: NEQ .
+
+    $default  reduce using rule 53 (Relational_operators)
+
+
+state 113
+
+   52 Relational_operators: EQ .
+
+    $default  reduce using rule 52 (Relational_operators)
+
+
+state 114
+
+   48 BoolValues: Expression Relational_operators . Expression
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 30
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression        go to state 125
+    Multipliers       go to state 32
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 115
+
+   11 Statement: IF BooleanExpression THEN . MultipleStat Else ENDIF
+
+    IDENT     shift, and go to state 4
+    IF        shift, and go to state 70
+    CONTINUE  shift, and go to state 71
+    READ      shift, and go to state 72
+    WRITE     shift, and go to state 73
+    WHILE     shift, and go to state 74
+    DO        shift, and go to state 75
+    FOR       shift, and go to state 76
+    RETURN    shift, and go to state 77
+
+    Statement     go to state 78
+    MultipleStat  go to state 126
+    Identifiers   go to state 80
+    Identifier    go to state 15
+
+
+state 116
+
+   43 BooleanExpression: CheckforAND OR . BooleanExpression
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    TRUE     shift, and go to state 84
+    FALSE    shift, and go to state 85
+    NOT      shift, and go to state 86
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 87
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression         go to state 88
+    Multipliers        go to state 32
+    AddOrSub           go to state 33
+    NestedExpression   go to state 34
+    BooleanExpression  go to state 127
+    CheckforAND        go to state 90
+    CheckforNot        go to state 91
+    BoolValues         go to state 92
+    Identifiers        go to state 35
+    Identifier         go to state 15
+
+
+state 117
+
+   45 CheckforAND: CheckforNot AND . CheckforAND
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    TRUE     shift, and go to state 84
+    FALSE    shift, and go to state 85
+    NOT      shift, and go to state 86
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 87
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression        go to state 88
+    Multipliers       go to state 32
+    AddOrSub          go to state 33
+    NestedExpression  go to state 34
+    CheckforAND       go to state 128
+    CheckforNot       go to state 91
+    BoolValues        go to state 92
+    Identifiers       go to state 35
+    Identifier        go to state 15
+
+
+state 118
+
+   12 Statement: WHILE BooleanExpression BEGINLOOP . MultipleStat ENDLOOP
+
+    IDENT     shift, and go to state 4
+    IF        shift, and go to state 70
+    CONTINUE  shift, and go to state 71
+    READ      shift, and go to state 72
+    WRITE     shift, and go to state 73
+    WHILE     shift, and go to state 74
+    DO        shift, and go to state 75
+    FOR       shift, and go to state 76
+    RETURN    shift, and go to state 77
+
+    Statement     go to state 78
+    MultipleStat  go to state 129
+    Identifiers   go to state 80
+    Identifier    go to state 15
+
+
+state 119
+
+   13 Statement: DO BEGINLOOP MultipleStat . ENDLOOP WHILE BooleanExpression
+
+    ENDLOOP  shift, and go to state 130
+
+
+state 120
+
+   14 Statement: FOR Identifier IN . Identifier BEGINLOOP MultipleStat ENDLOOP
+
+    IDENT  shift, and go to state 4
+
+    Identifier  go to state 131
+
+
+state 121
+
+   21 MultipleStat: Statement SEMICOLON MultipleStat .
+
+    $default  reduce using rule 21 (MultipleStat)
+
+
+state 122
+
+   10 Statement: Identifiers error Expression .
+
+    $default  reduce using rule 10 (Statement)
+
+
+state 123
+
+    9 Statement: Identifiers ASSIGN Expression .
+
+    $default  reduce using rule 9 (Statement)
+
+
+state 124
+
+   51 BoolValues: L_PAREN BooleanExpression R_PAREN .
+
+    $default  reduce using rule 51 (BoolValues)
+
+
+state 125
+
+   48 BoolValues: Expression Relational_operators Expression .
+
+    $default  reduce using rule 48 (BoolValues)
+
+
+state 126
+
+   11 Statement: IF BooleanExpression THEN MultipleStat . Else ENDIF
+
+    ELSE  shift, and go to state 132
+
+    $default  reduce using rule 19 (Else)
+
+    Else  go to state 133
+
+
+state 127
+
+   43 BooleanExpression: CheckforAND OR BooleanExpression .
+
+    $default  reduce using rule 43 (BooleanExpression)
+
+
+state 128
+
+   45 CheckforAND: CheckforNot AND CheckforAND .
+
+    $default  reduce using rule 45 (CheckforAND)
+
+
+state 129
+
+   12 Statement: WHILE BooleanExpression BEGINLOOP MultipleStat . ENDLOOP
+
+    ENDLOOP  shift, and go to state 134
+
+
+state 130
+
+   13 Statement: DO BEGINLOOP MultipleStat ENDLOOP . WHILE BooleanExpression
+
+    WHILE  shift, and go to state 135
+
+
+state 131
+
+   14 Statement: FOR Identifier IN Identifier . BEGINLOOP MultipleStat ENDLOOP
+
+    BEGINLOOP  shift, and go to state 136
+
+
+state 132
+
+   20 Else: ELSE . MultipleStat
+
+    IDENT     shift, and go to state 4
+    IF        shift, and go to state 70
+    CONTINUE  shift, and go to state 71
+    READ      shift, and go to state 72
+    WRITE     shift, and go to state 73
+    WHILE     shift, and go to state 74
+    DO        shift, and go to state 75
+    FOR       shift, and go to state 76
+    RETURN    shift, and go to state 77
+
+    Statement     go to state 78
+    MultipleStat  go to state 137
+    Identifiers   go to state 80
+    Identifier    go to state 15
+
+
+state 133
+
+   11 Statement: IF BooleanExpression THEN MultipleStat Else . ENDIF
+
+    ENDIF  shift, and go to state 138
+
+
+state 134
+
+   12 Statement: WHILE BooleanExpression BEGINLOOP MultipleStat ENDLOOP .
+
+    $default  reduce using rule 12 (Statement)
+
+
+state 135
+
+   13 Statement: DO BEGINLOOP MultipleStat ENDLOOP WHILE . BooleanExpression
+
+    IDENT    shift, and go to state 4
+    NUMBER   shift, and go to state 28
+    TRUE     shift, and go to state 84
+    FALSE    shift, and go to state 85
+    NOT      shift, and go to state 86
+    SUB      shift, and go to state 29
+    L_PAREN  shift, and go to state 87
+
+    SUB       [reduce using rule 40 (NestedExpression)]
+    $default  reduce using rule 40 (NestedExpression)
+
+    Expression         go to state 88
+    Multipliers        go to state 32
+    AddOrSub           go to state 33
+    NestedExpression   go to state 34
+    BooleanExpression  go to state 139
+    CheckforAND        go to state 90
+    CheckforNot        go to state 91
+    BoolValues         go to state 92
+    Identifiers        go to state 35
+    Identifier         go to state 15
+
+
+state 136
+
+   14 Statement: FOR Identifier IN Identifier BEGINLOOP . MultipleStat ENDLOOP
+
+    IDENT     shift, and go to state 4
+    IF        shift, and go to state 70
+    CONTINUE  shift, and go to state 71
+    READ      shift, and go to state 72
+    WRITE     shift, and go to state 73
+    WHILE     shift, and go to state 74
+    DO        shift, and go to state 75
+    FOR       shift, and go to state 76
+    RETURN    shift, and go to state 77
+
+    Statement     go to state 78
+    MultipleStat  go to state 140
+    Identifiers   go to state 80
+    Identifier    go to state 15
+
+
+state 137
+
+   20 Else: ELSE MultipleStat .
+
+    $default  reduce using rule 20 (Else)
+
+
+state 138
+
+   11 Statement: IF BooleanExpression THEN MultipleStat Else ENDIF .
+
+    $default  reduce using rule 11 (Statement)
+
+
+state 139
+
+   13 Statement: DO BEGINLOOP MultipleStat ENDLOOP WHILE BooleanExpression .
+
+    $default  reduce using rule 13 (Statement)
+
+
+state 140
+
+   14 Statement: FOR Identifier IN Identifier BEGINLOOP MultipleStat . ENDLOOP
+
+    ENDLOOP  shift, and go to state 141
+
+
+state 141
+
+   14 Statement: FOR Identifier IN Identifier BEGINLOOP MultipleStat ENDLOOP .
+
+    $default  reduce using rule 14 (Statement)
