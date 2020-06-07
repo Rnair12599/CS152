@@ -1,0 +1,11 @@
+function test;
+beginparams
+endparams
+
+beginlocals
+i : integer;
+endlocals
+
+beginbody
+   a = 1;
+endbody

@@ -1,0 +1,12 @@
+function test;
+beginparams
+endparams
+
+beginlocals
+i_ : integer;
+endlocals
+
+beginbody
+   read i;
+   write i+1;
+endbody
