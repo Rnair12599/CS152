@@ -5,11 +5,6 @@
 extern int currLine;
 extern char* yytext;
 int yyerror(const char* s);
-
-
-
-vector <string> parameterList;
-vector <string> fucntionsList;
 %}
 
 %union{
@@ -23,24 +18,31 @@ vector <string> fucntionsList;
 %token <ident_val> IDENT
 %token <num_val> NUMBER
 
-
-%token FUNCTION BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY INTEGER ARRAY OF IF THEN ENDIF ELSE CONTINUE READ WRITE WHILE DO FOR IN BEGINLOOP ENDLOOP TRUE FALSE L_PAREN R_PAREN L_SQUARE_BRACKET R_SQUARE_BRACKET SEMICOLON COLON COMMA RETURN
-%left MULT DIV MOD ADD SUB
-%left LT LTE GT GTE EQ NEQ
+%token FUNCTION
+%token BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY
+%token INTEGER ARRAY
+%token OF IF THEN ENDIF ELSE
+%token CONTINUE
+%token READ WRITE
+%token WHILE DO FOR IN BEGINLOOP ENDLOOP
+%token TRUE FALSE
+%left AND OR ASSIGN
 %right NOT
-%left AND OR
-%right ASSIGN
+%left ADD SUB MULT DIV MOD EQ NEQ LT GT LTE GTE
+%token L_PAREN R_PAREN L_SQUARE_BRACKET R_SQUARE_BRACKET SEMICOLON COLON COMMA
+%token RETURN
+
 
 
 %%
 
-Program_start:
+Program_start:     {printf("Program_start -> epsilon\n");}
                  | Func Program_start
-
+		 {printf("Program_start -> Func Program_start\n");}
 ;
 
 Func:        FUNCTION Identifier SEMICOLON BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
-{}
+{printf("Func -> FUNCTION Identifier SEMICOLON BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY\n");}
 |FUNCTION Identifier error BEGIN_PARAMS MultipleDefs END_PARAMS BEGIN_LOCALS MultipleDefs END_LOCALS BEGIN_BODY MultipleStat END_BODY
 ;
 
